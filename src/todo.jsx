@@ -12,8 +12,8 @@ export function Todo(){
     const [tasks,setTasks]=useState([]);
 
     async function getData(){
-        const res= await axios.get(uri);
-        setTasks(res.data);
+        const res= await axios.get(uri); 
+        setTasks(res.data); // setting state using the response
     }
     
     
