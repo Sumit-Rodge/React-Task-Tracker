@@ -30,6 +30,7 @@ app.post('/addtask',async (req,res)=>{
         const client = await MongoClient.connect(uri);
         const length = (await client.db('todo').collection('todo').find({}).toArray()).length;
         await client.db('todo').collection('todo').insertOne({"id":length + 1,"task":entry,"status":false});
+        res.sendStatus(200).end();
     } catch (error) {
         console.log(error);
     }
@@ -40,8 +41,8 @@ app.delete('/removetask/:taskid',async (req,res)=>{
     const taskid = parseInt(req.params.taskid);
     try {
         client= await MongoClient.connect(uri);
-        await client.db('todo').collection('todo').deleteOne({id:taskid})
-        console.log('completed')
+        await client.db('todo').collection('todo').deleteOne({id:taskid});
+        res.sendStatus(200).end();
     } catch (error) {
         console.error('Error handling the request:', error);
         res.status(500).send('Internal Server Error');

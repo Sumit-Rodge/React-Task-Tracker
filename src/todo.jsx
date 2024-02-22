@@ -10,7 +10,6 @@ export function Todo(){
     const [taskText,setTaskText]=useState('')
     const [taskError,setTaskError] = useState('');
     const [tasks,setTasks]=useState([]);
-    const [temp,setTemp]=useState(false);
 
     async function getData(){
         const res= await axios.get(uri);
@@ -18,22 +17,6 @@ export function Todo(){
     }
     
     
-    // async function addData(){
-    //     setTaskError('');       
-    //     if(taskText !== ''){
-    //         // alert('hii')
-    //         await axios.post(`${uri}/addtask`,{"task":taskText},{
-    //             headers:{
-    //                 'Content-type':'application/json'
-    //             }
-    //         });
-
-    //         await getData()
-    //     } else {
-    //         setTaskError('Enter Your Task First')
-    //     }
-    // }
-
     async function addData() {
         
         setTaskError('');
@@ -44,16 +27,12 @@ export function Todo(){
                         'Content-type': 'application/json'
                     }
                 });
-                alert('Task Added');
                 getData();
                 
-
               } catch (error) {
                 console.error('Error adding task:', error);
                 setTaskError('Error adding task. Please try again.'); // Set an error message on failure
             }
-
-            console.log('added');
         } else {
             setTaskError('Enter Your Task First');
         }
@@ -61,19 +40,18 @@ export function Todo(){
     }
 
     async function removeTask(e){
-        setTemp(!temp);
         const taskid = e.target.id;
         await axios.delete(`${uri}/removetask/${taskid}`,{
             headers:{
                 'Content-Type': 'application/json',
             }
         })
+        getData();
     }
 
     useEffect(()=>{
-        console.log("side effect" )
         getData();
-    },[temp])
+    },[])
 
    
     return (

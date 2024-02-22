@@ -57,7 +57,7 @@ button.add-btn {
 }
 
 input.task-input {
-    height: 3vw;
+    height: 35px;
     padding: 0 1rem;
     border-radius: 12px;
     /* margin-right: 10px; */
