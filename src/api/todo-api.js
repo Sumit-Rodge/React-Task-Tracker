@@ -49,6 +49,22 @@ app.delete('/removetask/:taskid',async (req,res)=>{
     }
 })
 
+app.put('/update/:taskid',async (req,res)=>{
+    
+    const taskid = parseInt(req.params.taskid);
+    
+    try {
+        client= await MongoClient.connect(uri);
+        let doc = await client.db('todo').collection('todo').findOne({id:taskid});
+        let initialStatus = doc.status;
+        await client.db('todo').collection('todo').updateOne({id:taskid},{$set:{status:!initialStatus}});
+        res.sendStatus(200).end();
+    } catch (error) {
+        console.error('Error handling the request:', error);
+        res.status(500).send('Internal Server Error');
+    }
+})
+
 
 const port=4000;
 app.listen(port,()=>{
