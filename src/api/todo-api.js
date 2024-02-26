@@ -24,9 +24,27 @@ app.get('/',async (req,res)=>{
 
 })
 
+app.get('/task/:id',async (req,res)=>{
+    const taskid = parseInt(req.params.id);
+    let client;
+    try {
+        client = await MongoClient.connect(uri);
+        const data = await client.db('todo').collection('todo').find({id:taskid}).toArray();
+        res.send(data)
+    } catch (error) {
+        console.error('Error handling the request:', error);
+        res.status(500).send('Internal Server Error');
+    } finally{
+        await client.close()
+    }
+
+})
+
+
 app.post('/addtask',async (req,res)=>{
     try {
         const entry = await req.body.task;
+        
         const client = await MongoClient.connect(uri);
         const length = (await client.db('todo').collection('todo').find({}).toArray()).length;
         await client.db('todo').collection('todo').insertOne({"id":length + 1,"task":entry,"status":false});
@@ -35,6 +53,22 @@ app.post('/addtask',async (req,res)=>{
         console.log(error);
     }
 })
+
+
+
+app.put('/updatetask/:taskid',async (req,res)=>{
+    try {
+        const entry = await req.body.task;
+        const taskid = parseInt(req.params.taskid);
+        const client = await MongoClient.connect(uri);
+        
+        await client.db('todo').collection('todo').updateOne({id:taskid},{$set:{task:entry}})
+        res.sendStatus(200).end();
+    } catch (error) {
+        console.log(error);
+    }
+})
+
 
 app.delete('/removetask/:taskid',async (req,res)=>{
     let client;
