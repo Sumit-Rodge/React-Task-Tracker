@@ -3,6 +3,7 @@ import axios from 'axios';
 
 export const Editing = (id) => {
   const uri ='http://127.0.0.1:4000';
+  const [task,setTask] = useState([]);
   const [updateTask,setUpdateTask] = useState('');
 
   async function handleUpdate(){
