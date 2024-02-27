@@ -1,8 +1,9 @@
 import axios from 'axios'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import '../src/todo.css'
 import { Editing } from './Editing';
 import { Link } from 'react-router-dom';
+
 export function Todo(){
 
     const uri ='http://127.0.0.1:4000';
@@ -62,7 +63,21 @@ export function Todo(){
     useEffect(()=>{
         getData();
     },[])
-   
+
+    const [taskEditing,setTaskEditing]=useState(false);
+    const [taskId,setTaskId]=useState(0)
+
+    const myRef = useRef();
+
+    function openModal(e){
+        const node = e.target.parentNode.previousSibling.querySelector('p');
+        console.log(node.innerText);
+        myRef.current.showModal();
+    }
+
+    
+
+      
     return (
         <div className="h-screen dark:bg-gray-900 dark:text-gray-100 flex flex-col items-center pt-8 bg-gray-100 text-gray-900  ">
             <div className='flex  mb-4'>
@@ -88,19 +103,20 @@ export function Todo(){
                             <p {...(task.status === true ? {className:'line-through'}:{className:'text-lg'})}>{task.task}</p>
                         </div>
                         <div>
-                        <Link to={`/updatetask/${task.id}`} className='bg-green-900 mr-2 p-2 rounded-lg hover:bg-green-700 hover:text-white hover:font-bold'>Edit </Link>
-                           
-
-                        <button className="bg-red-900 p-2 rounded-lg hover:bg-red-400 hover:text-red-900 hover:font-bold" onClick={removeTask} id={task.id} >Remove</button>
-
-                        </div>
-                           
+                        <button className="bg-green-900 mr-2 p-2 rounded-lg hover:bg-green-700 hover:text-white hover:font-bold" onClick={()=>{
+                            setTaskEditing(true);
+                            setTaskId(task.id);
+                        }} id={task.id} >Edit</button>   
+                        <button className="bg-red-900 p-2 rounded-lg hover:bg-red-400 hover:text-red-900 hover:font-bold" onClick={removeTask} id={task.id} >Remove</button>  
+                        </div>  
                     </div>
-                    
-                    </div> 
+                    </div>    
                 })
             }
+            
+            
             </div>
+            {taskEditing?<Editing id={taskId}/>:''}
         </div>
     )
 }
