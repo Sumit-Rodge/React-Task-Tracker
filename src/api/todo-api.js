@@ -2,7 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const { MongoClient } = require('mongodb');
 
-const uri = 'mongodb://localhost:27017';
+// const uri = 'mongodb://localhost:27017';
+const uri = 'mongodb+srv://sumit:7020Sumit@todo.juhjrsb.mongodb.net/';
 
 const app = express();
 app.use(cors());
